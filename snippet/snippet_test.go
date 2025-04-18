@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/knqyf263/pet/config"
-	"github.com/pelletier/go-toml"
+	"github.com/pelletier/go-toml/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -77,7 +77,7 @@ func createSnippetFile(t *testing.T, filename string, snippets *Snippets) {
 	// Encode the snippets to TOML without using save and write to the file
 	snippetsFile, err := os.Create(filename)
 	assert.NoError(t, err)
-	err = toml.NewEncoder(snippetsFile).Encode(snippets)
+	err = toml.NewEncoder(snippetsFile).SetIndentTables(true).Encode(snippets)
 	assert.NoError(t, err)
 
 	err = snippetsFile.Close()
@@ -199,12 +199,12 @@ func TestSave(t *testing.T) {
 	assert.NotEmpty(t, data)
 
 	// Filename is not stored in the file, so it should not be present in the file
-	want := `
-[[Snippets]]
-  Description = "Test snippet"
-  Output = "Hello, World!"
-  Tag = ["test"]
-  command = "echo 'Hello, World!'"
+	want := `[[Snippets]]
+  Description = 'Test snippet'
+  Output = 'Hello, World!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World!'"""
 `
 	assert.Equal(t, want, string(data))
 }
@@ -251,18 +251,19 @@ func TestSaveWithMultipleSnippetFiles(t *testing.T) {
 	data, err := os.ReadFile(config.Conf.General.SnippetFile)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, data)
-	want := `
-[[Snippets]]
-  Description = "Test snippet"
-  Output = "Hello, World!"
-  Tag = ["test"]
-  command = "echo 'Hello, World!'"
+	want := `[[Snippets]]
+  Description = 'Test snippet'
+  Output = 'Hello, World!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World!'"""
 
 [[Snippets]]
-  Description = "Test snippet 2"
-  Output = "Hello, World 2!"
-  Tag = ["test"]
-  command = "echo 'Hello, World 2!'"
+  Description = 'Test snippet 2'
+  Output = 'Hello, World 2!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World 2!'"""
 `
 	assert.Equal(t, want, string(data))
 
@@ -270,36 +271,38 @@ func TestSaveWithMultipleSnippetFiles(t *testing.T) {
 	data, err = os.ReadFile(filepath.Join(includeDir, "snippets1.toml"))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, data)
-	want = `
-[[Snippets]]
-  Description = "Test snippet 3"
-  Output = "Hello, World 3!"
-  Tag = ["test"]
-  command = "echo 'Hello, World 3!'"
+	want = `[[Snippets]]
+  Description = 'Test snippet 3'
+  Output = 'Hello, World 3!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World 3!'"""
 
 [[Snippets]]
-  Description = "Test snippet 4"
-  Output = "Hello, World 4!"
-  Tag = ["test"]
-  command = "echo 'Hello, World 4!'"
+  Description = 'Test snippet 4'
+  Output = 'Hello, World 4!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World 4!'"""
 `
 	assert.Equal(t, want, string(data))
 
 	data, err = os.ReadFile(filepath.Join(includeDir, "snippets2.toml"))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, data)
-	want = `
-[[Snippets]]
-  Description = "Test snippet 5"
-  Output = "Hello, World 5!"
-  Tag = ["test"]
-  command = "echo 'Hello, World 5!'"
+	want = `[[Snippets]]
+  Description = 'Test snippet 5'
+  Output = 'Hello, World 5!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World 5!'"""
 
 [[Snippets]]
-  Description = "Test snippet 6"
-  Output = "Hello, World 6!"
-  Tag = ["test"]
-  command = "echo 'Hello, World 6!'"
+  Description = 'Test snippet 6'
+  Output = 'Hello, World 6!'
+  Tag = ['test']
+  command = """
+echo 'Hello, World 6!'"""
 `
 	assert.Equal(t, want, string(data))
 }

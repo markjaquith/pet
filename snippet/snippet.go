@@ -9,7 +9,7 @@ import (
 
 	"github.com/knqyf263/pet/config"
 	"github.com/knqyf263/pet/path"
-	"github.com/pelletier/go-toml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 type Snippets struct {
@@ -17,11 +17,11 @@ type Snippets struct {
 }
 
 type SnippetInfo struct {
-	Filename    string `toml:"-"`
 	Description string
-	Command     string `toml:"command,multiline"`
-	Tag         []string
 	Output      string
+	Tag         []string
+	Filename    string `toml:"-"`
+	Command     string `toml:"command,multiline"`
 }
 
 // Loads snippets from the main snippet file and all snippet
@@ -121,7 +121,7 @@ func (snippets *Snippets) Save() error {
 		}
 		defer f.Close()
 
-		err = toml.NewEncoder(f).Encode(Snippets{Snippets: snippets})
+		err = toml.NewEncoder(f).SetIndentTables(true).Encode(Snippets{Snippets: snippets})
 		if err != nil {
 			return fmt.Errorf("failed to encode snippets while saving snippet file. err: %s", err)
 		}
@@ -133,7 +133,7 @@ func (snippets *Snippets) Save() error {
 // ToString returns the contents of toml file.
 func (snippets *Snippets) ToString() (string, error) {
 	var buffer bytes.Buffer
-	err := toml.NewEncoder(&buffer).Encode(snippets)
+	err := toml.NewEncoder(&buffer).SetIndentTables(true).Encode(snippets)
 	if err != nil {
 		return "", fmt.Errorf("failed to convert struct to TOML string: %v", err)
 	}

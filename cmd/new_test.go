@@ -9,7 +9,7 @@ import (
 
 	"github.com/knqyf263/pet/config"
 	"github.com/knqyf263/pet/snippet"
-	"github.com/pelletier/go-toml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 // MockReadCloser is a mock implementation of io.ReadCloser

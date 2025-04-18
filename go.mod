@@ -1,6 +1,8 @@
 module github.com/knqyf263/pet
 
-go 1.21
+go 1.21.0
+
+toolchain go1.24.2
 
 require (
 	github.com/atotto/clipboard v0.1.4
@@ -24,7 +26,7 @@ require gopkg.in/alessio/shellescape.v1 v1.0.0-20170105083845-52074bc9df61
 require (
 	github.com/awesome-gocui/gocui v1.1.0
 	github.com/go-test/deep v1.1.1
-	github.com/pelletier/go-toml v1.9.5
+	github.com/pelletier/go-toml/v2 v2.2.4
 	golang.org/x/term v0.27.0
 )
 
